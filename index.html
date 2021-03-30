@@ -1,0 +1,95 @@
+<script src="http://cdnjs.cloudflare.com/ajax/libs/fabric.js/2.4.6/fabric.min.js"></script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FABRIC</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+	<canvas id="canvas" width="350" height="200"></canvas>
+
+	<br>
+	<img onClick="clickimg()" id="flower" src="image/flower.jpg" value="Save as Image">
+	<img onClick="clickimg()" id="sea" src="image/sea.jpg" value="Save as Image">
+
+</body>
+
+<script>
+	const card = new fabric.Canvas('canvas') 
+// ...這裡可以寫canvas對象的一些配置，後面將會介紹
+// 如果<canvas>標籤沒設置寬高，可以通過js動態設置
+
+	// 設背景顏色
+	card.setBackgroundColor('pink');
+	card.setWidth(350);
+	card.setHeight(200);
+
+// 	card.on('selection:created', (e) => {
+// // 選中圖層事件觸發時，動態更新賦值
+// 	console.log(e.target)
+// 	this.selectedObj = e.target
+// })
+
+
+
+
+
+/**
+* 如何向畫布添加一個Image對象？
+*/
+// 方式一（通過img元素添加）
+// const imgElement = document.getElementById('my-image');
+// const imgInstance = new fabric.Image(imgElement, {
+// left: 100, // 圖片相對畫布的左側距離
+// top: 100, // 圖片相對畫布的頂部距離
+// angle: 30, // 圖片旋轉角度
+// opacity: 1, // 圖片透明度
+// // 這裡可以通過scaleX和scaleY來設置圖片繪製後的大小，這裡為原來大小的一半
+// scaleX: 0.5, 
+// scaleY: 0.5
+// });
+// // 添加對象後, 如下圖
+// card.add(imgInstance);
+
+
+function clickimg() {
+const imgElement = document.getElementById('flower');
+const imgInstance = new fabric.Image(imgElement, {
+left: 0, // 圖片相對畫布的左側距離
+top: 0, // 圖片相對畫布的頂部距離
+angle: 0, // 圖片旋轉角度
+opacity: 1, // 圖片透明度
+// 這裡可以通過scaleX和scaleY來設置圖片繪製後的大小，這裡為原來大小的一半
+scaleX: 0.5, 
+scaleY: 0.5
+});
+// 添加對象後, 如下圖
+card.add(imgInstance);
+
+}
+
+
+// * 如何向畫布添加一個Textbox對象？
+// */
+// const textbox = new fabric.Textbox('這是一段文字', {
+// left: 50,
+// top: 50,
+// width: 150,
+// fontSize: 20, // 字體大小
+// // fontWeight: 300, // 字體粗細
+// fill: 'black', // 字體顏色
+// // fontStyle: 'italic',  // 斜體
+// fontFamily: 'Delicious', // 設置字體
+// // stroke: 'green', // 描邊顏色
+// strokeWidth: 1, // 描邊寬度
+// hasControls: false,
+// borderColor: 'orange',
+// editingBorderColor: 'blue' // 點擊文字進入編輯狀態時的邊框顏色
+// });
+// // 添加文字後，如下圖
+// card.add(textbox);
+
+
+
+
+</script>
