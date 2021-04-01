@@ -6,33 +6,139 @@
   <link rel="stylesheet" href="main.css">
 </head>
 <body>
-	<canvas id="canvas" width="350" height="200"></canvas>
-
+	<canvas id="canvas" width="400" height="350"></canvas>
+	<input type="file" id="image_load"/>
+	<button id="delate_btn">Delate All</button>
+	<a id="image_save" class="btn" href="#">Save Image</a>
+	<a id="image_font" class="btn" href="#">Move to the front</a>
+	<a id="image_back" class="btn" href="#">Move to the back</a>
+	<div class="container_img">
+		<img src="image/flower.jpg" alt="">
+		<img src="image/dog.jpg" alt="">
+		<img src="image/dog02.jpg" alt="">
+	</div>
 	<br>
-	<img onClick="clickimg()" id="flower" src="image/flower.jpg" value="Save as Image">
-	<img onClick="clickimg()" id="sea" src="image/sea.jpg" value="Save as Image">
+	
 
 </body>
 
 <script>
 	const card = new fabric.Canvas('canvas') 
-// ...這裡可以寫canvas對象的一些配置，後面將會介紹
+// ...這裡可以寫canvas對象的一些配置
 // 如果<canvas>標籤沒設置寬高，可以通過js動態設置
 
 	// 設背景顏色
-	card.setBackgroundColor('pink');
-	card.setWidth(350);
-	card.setHeight(200);
+	// card.setBackgroundColor('pink');
+	card.setWidth(400);
+	card.setHeight(350);
+// -----------------
+// 上傳圖片
+var imageLoader = document.querySelector('#image_load');
+imageLoader.addEventListener('change', uploadImage, false);
+// function uploadImage(e){
+// 	console.log(e.target.files)
+// }
 
-// 	card.on('selection:created', (e) => {
-// // 選中圖層事件觸發時，動態更新賦值
-// 	console.log(e.target)
-// 	this.selectedObj = e.target
-// })
+function uploadImage(e) {
+    var reader = new FileReader();
+		// console.log(reader)
+    reader.onload = function (event) {
+				// console.log(event)
+        var img = new Image();
+				// console.log(img)
+        img.onload = function () {
+            var imgInstance = new fabric.Image(img, {
+                scaleX: 0.2,
+                scaleY: 0.2
+            })
+            card.add(imgInstance);
+        }
+        img.src = event.target.result;
+    }
+    reader.readAsDataURL(e.target.files[0]);
+}
+
+// 儲存圖片
+var imageSave = document.querySelector('#image_save');
+imageSave.addEventListener('click', saveImage, false);
+
+function saveImage(e) {
+		console.log(this)
+		console.log(this.href)
+    this.href = canvas.toDataURL({
+        format: 'jpeg',
+        quality: 0.8
+    });
+		console.log(this.href)
+    this.download = 'icon.png'
+}
+	
+
+// -------------------
+// 點選圖片會加到canvas上
+document.querySelectorAll(".container_img img").forEach(el => {
+	el.addEventListener("click", () => {
+		fabric.Image.fromURL( el.src, img => {
+			img.scale(1);
+			img.set({ left: 100, top: 100});
+			card.add(img);
+		});
+	});
+
+});
+
+// 鍵盤案Backspace或Delete圖片會消失
+document.addEventListener("keydown", e => {
+	if(e.key === "Backspace" || e.key === "Delete"){
+		card.remove(card.getActiveObject());
+	}
+});
+
+// 清除所有按鈕
+document.querySelector("#delate_btn").addEventListener('click', () => {
+  card.clear();
+});
+
+// 圖片移到最上層或是最下層
+let itemFont=document.querySelector("#image_font");
+let itemBack=document.querySelector("#image_back");
+
+var selectedObject;
+
+card.on('object:selected', function(event) {
+	console.log(event.target)
+  selectedObject = event.target;
+});
+
+itemFont.addEventListener("click", objectToFront);
+itemBack.addEventListener("click", objectToBack);
+function objectToFront(){
+	card.bringToFront(selectedObject);
+};
+function objectToBack(){
+	card.sendToBack(selectedObject);
+};
 
 
 
 
+
+
+// function clickimg() {
+// const imgElement = document.getElementById('flower');
+// const imgInstance = new fabric.Image(imgElement, {
+// left: 0, // 圖片相對畫布的左側距離
+// top: 0, // 圖片相對畫布的頂部距離
+// angle: 0, // 圖片旋轉角度
+// opacity: 1, // 圖片透明度
+// // 這裡可以通過scaleX和scaleY來設置圖片繪製後的大小，這裡為原來大小的一半
+// scaleX: 0.5, 
+// scaleY: 0.5
+// });
+// // 添加對象後, 如下圖
+// card.add(imgInstance);
+
+// }
 
 /**
 * 如何向畫布添加一個Image對象？
@@ -52,21 +158,6 @@
 // card.add(imgInstance);
 
 
-function clickimg() {
-const imgElement = document.getElementById('flower');
-const imgInstance = new fabric.Image(imgElement, {
-left: 0, // 圖片相對畫布的左側距離
-top: 0, // 圖片相對畫布的頂部距離
-angle: 0, // 圖片旋轉角度
-opacity: 1, // 圖片透明度
-// 這裡可以通過scaleX和scaleY來設置圖片繪製後的大小，這裡為原來大小的一半
-scaleX: 0.5, 
-scaleY: 0.5
-});
-// 添加對象後, 如下圖
-card.add(imgInstance);
-
-}
 
 
 // * 如何向畫布添加一個Textbox對象？
